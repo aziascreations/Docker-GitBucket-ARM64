@@ -1,0 +1,20 @@
+version: "3.3"
+
+services:
+  gitbucket:
+    container_name: gitbucket
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 30880:8080
+      #- 30022:8443  # HTTPS port ?
+      - 30022:29418
+    volumes:
+      - ./data:/gitbucket/gitbucket_data
+    environment:
+      # Does not work, for some reason.
+      GITBUCKET_MAXFILESIZE: 67108864
+    restart: unless-stopped
+    tty: true  # Can be commented if you don't intend to use a shell in the container.
+    stdin_open: true  # Can also be commented for the same reason as above.
