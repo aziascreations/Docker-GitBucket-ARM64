@@ -19,6 +19,6 @@ In order to build this container, all you have to do is to clone this repository
 TODO.
 
 ## License
-[License](LICENSE)
+[Unlicensed](LICENSE)
 
 This license does not apply to *GitBucket*, *Java* and any of the other applications used by this container.
