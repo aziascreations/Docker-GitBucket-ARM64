@@ -10,8 +10,6 @@ ADD https://github.com/gitbucket/gitbucket/releases/download/$GITBUCKET_DESIRED_
 # Setting up required GitBucket's environment variables
 ENV GITBUCKET_HOME /gitbucket/gitbucket_data
 ENV DATABASE_URL jdbc:h2:/gitbucket/gitbucket_data/data;MVCC=true
-#ENV JVM_RAM_MIN -Xms128m
-#ENV JVM_RAM_MAX -Xmx256m
 ENV JVM_RAM_MIN 128m
 ENV JVM_RAM_MAX 256m
 
