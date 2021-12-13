@@ -1,26 +1,25 @@
 FROM eclipse-temurin:latest
 
 # Preparing GitBucket's folder and installing packages.
-RUN mkdir /gitbucket && apt-get update
+RUN mkdir /gitbucket && apt-get update && apt-get -y install git
 
-# Comment if you don't need a shell access via bash in the container.
-# RUN apt-get -y install bash
-
-# Uncomment if you are using a plugin that requires Git to be installed.
-# RUN apt-get -y install git
-
-# Downloading gitBucket 4.36.2
-ADD https://github.com/gitbucket/gitbucket/releases/download/4.36.2/gitbucket.war /gitbucket/gitbucket.war 
+# Downloading GitBucket
+ARG GITBUCKET_DESIRED_VERSION=4.37.0
+ADD https://github.com/gitbucket/gitbucket/releases/download/$GITBUCKET_DESIRED_VERSION/gitbucket.war /gitbucket/gitbucket.war
 
 # Setting up required GitBucket's environment variables
 ENV GITBUCKET_HOME /gitbucket/gitbucket_data
-ENV DATABASE_URL jdbc:h2:/gitbucket/gitbucket_daya/data;MVCC=true
+ENV DATABASE_URL jdbc:h2:/gitbucket/gitbucket_data/data;MVCC=true
+#ENV JVM_RAM_MIN -Xms128m
+#ENV JVM_RAM_MAX -Xmx256m
+ENV JVM_RAM_MIN 128m
+ENV JVM_RAM_MAX 256m
 
-# Exposing HTTP and SSH ports
+# Exposing HTTP, HTTPS and SSH ports
 EXPOSE 8080
 EXPOSE 8443
+EXPOSE 29418
 
 # Running the application
-# You can remove the "-Xms128m" and "-Xmx256m" arguments if you need to support more than a couple concurent users.
 WORKDIR /gitbucket
-CMD ["java", "-Xms128m", "-Xmx256m", "-jar", "/gitbucket/gitbucket.war"]
+CMD java -Xms$JVM_RAM_MIN -Xmx$JVM_RAM_MAX -Dlog4j2.formatMsgNoLookups=true -jar /gitbucket/gitbucket.war
